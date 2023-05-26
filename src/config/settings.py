@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'drf_yasg',
+    # 'rest_framework_simplejwt',
 
     'src.apps.accounts',
     'src.apps.api',
@@ -57,6 +58,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'src.config.urls'
+
+AUTH_USER_MODEL = "accounts.User"
+
 
 TEMPLATES = [
     {
@@ -134,6 +138,13 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
 
 
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+
+}
 
 
 
