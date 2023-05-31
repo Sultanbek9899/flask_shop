@@ -33,8 +33,16 @@ class CategoryViewSet(ModelViewSet):
 
 
 
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 
 class IndexView(TemplateView):
     template_name = "index.html"
+
+
+class ProductListView(ListView):
+    template_name="product_list.html"
+    model = Product
+    queryset = Product.objects.filter(is_active=True)
+    context_object_name = "products"
+    

@@ -3,7 +3,22 @@ from django.contrib import admin
 # Register your models here.
 from src.apps.product.models import Product, ProductImage, Category
 
-admin.site.register(Category)
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = [
+        "name", 
+        "slug",
+        'is_main',
+    ]
+    list_filter = [
+        "is_main"
+    ]
+    search_fields = [
+        "name"
+    ]
+    prepopulated_fields = {"slug": ("name", )}
+
+
 
 class ProductImageInline(admin.StackedInline):
     model = ProductImage
