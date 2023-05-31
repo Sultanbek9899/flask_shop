@@ -6,8 +6,14 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
 
 # Create your views here.
+    
+
+from django.shortcuts import get_object_or_404
+from src.apps.product.models import Product
+from src.apps.product.serializers import ProductSerializer
 
 from src.apps.accounts.models import User
 from src.apps.accounts.serializers import *
@@ -67,3 +73,55 @@ class UserUpdateAPIView(generics.UpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class AddFavoriteProduct(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        product_id = kwargs.get("pk")
+        product = get_object_or_404(Product, id=product_id)
+        user = request.user
+        if product not in user.favorites.all():
+            user.favorites.add(product)
+            return Response(
+                {"message":"Product was added to favorites"},
+                status=status.HTTP_200_OK            
+            )
+        return Response(
+            {"message":"Product is already in favorites"},
+            status=status.HTTP_200_OK
+        ) 
+
+
+class RemoveFavoriteProduct(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self,request, *args, **kwargs):
+        product_id = kwargs.get("pk")
+        product = get_object_or_404(Product, id=product_id)
+        user = request.user
+        if product in user.favorites.all():
+            user.favorites.remove(product)
+            return Response(
+                {"message":"Product was removed from favorites"},
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {"message":"Product is not in favorites"},
+            status=status.HTTP_200_OK
+        )
+    
+
+class UserProductFavoritesList(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    model = Product
+    permission_classes = [IsAuthenticated]
+    
+
+    def get_queryset(self):
+        user = self.request.user
+        products = user.favorites.all()
+        return products

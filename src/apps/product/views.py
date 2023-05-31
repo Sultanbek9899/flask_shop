@@ -28,3 +28,13 @@ class CategoryViewSet(ModelViewSet):
             permission_classes = [IsAuthenticated]  # Add your desired permission classes for other actions (e.g., create, update, delete)
 
         return [permission() for permission in permission_classes]
+    
+
+
+
+
+from django.views.generic import TemplateView
+
+
+class IndexView(TemplateView):
+    template_name = "index.html"

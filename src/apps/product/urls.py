@@ -12,7 +12,7 @@ router.register('category', views.CategoryViewSet, basename="category")
 
 
 urlpatterns = [
-   
+   path('', views.IndexView.as_view())
 ]
 
 
