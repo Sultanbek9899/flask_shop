@@ -6,7 +6,7 @@
 <main class="main">
     <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
         <div class="container">
-            <h1 class="page-title">Grid 4 Columns<span>Shop</span></h1>
+            <h1 class="page-title">{{category_name}}</h1>
         </div><!-- End .container -->
     </div><!-- End .page-header -->
     <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
@@ -95,7 +95,7 @@
                                 <div class="product product-7 text-center">
                                     <figure class="product-media">
                                         <span class="product-label label-new">New</span>
-                                        <a href="product.html">
+                                        <a href="{% url 'product_detail' p.pk %}">
                                             <img src="{{p.main_image}}" alt="Product image" class="product-image">
                                         </a>
 

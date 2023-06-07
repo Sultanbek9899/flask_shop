@@ -1,3 +1,5 @@
+from typing import Any, Dict
+from django.db.models.query import QuerySet
 from django.shortcuts import render
 
 from rest_framework.viewsets import ModelViewSet
@@ -33,7 +35,7 @@ class CategoryViewSet(ModelViewSet):
 
 
 
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 
 
 class IndexView(TemplateView):
@@ -46,3 +48,49 @@ class ProductListView(ListView):
     queryset = Product.objects.filter(is_active=True)
     context_object_name = "products"
     
+    #   /product/jenskaya_odejda/
+    #  /product/jenskaya_odejda/platie/
+    def get_queryset(self):
+        category_slug = self.kwargs.get("category_slug")
+        subcategory_slug = self.kwargs.get("subcategory_slug")
+
+        if subcategory_slug:
+            products = Product.objects.filter(category__slug=subcategory_slug, is_active=True)
+        elif category_slug:
+            products = Product.objects.filter(category__parent__slug=category_slug, is_active=True)
+        else:
+            products = Product.objects.filter(is_active=True)
+
+        return products
+    
+    def get_context_data(self, **kwargs):
+        category_slug = self.kwargs.get("category_slug")
+        subcategory_slug = self.kwargs.get("subcategory_slug")
+        text = ""
+        context = super().get_context_data(**kwargs)
+        if subcategory_slug:
+            subcategory = Category.objects.select_related("parent").get(slug=subcategory_slug)
+
+            if "Мужская" in subcategory.parent.name:
+                text = f"Мужские {subcategory.name}"
+            elif "Женская" in subcategory.parent.name:
+                text = f"Женские {subcategory.name}"
+            elif "Детская" in subcategory.parent.name:
+                text = f"Детские {subcategory.name}"
+
+        elif category_slug:
+            category = Category.objects.get(slug=category_slug)
+            text = category.name
+        
+        context["category_name"] = text
+        return context
+        
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'product_detail.html'
+    queryset = Product.objects.filter(is_active=True)
+    context_object_name = "product"
+    
+
