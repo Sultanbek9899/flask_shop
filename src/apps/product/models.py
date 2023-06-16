@@ -15,6 +15,8 @@ class Color(models.Model):
         return f"{self.name}"
 
 def get_slug_value(instance):
+    if instance.is_main:
+        return transliterate(f"{instance.name}".lower())
     return transliterate(f"{instance.parent.name}-{instance.name}".lower())
 
 def get_slugify_value(value):

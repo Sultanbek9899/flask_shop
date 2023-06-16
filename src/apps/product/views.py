@@ -64,6 +64,7 @@ class ProductListView(ListView):
         return products
     
     def get_context_data(self, **kwargs):
+        print(self.request.META.get('HTTP_REFERER'))
         category_slug = self.kwargs.get("category_slug")
         subcategory_slug = self.kwargs.get("subcategory_slug")
         text = ""
@@ -94,3 +95,19 @@ class ProductDetailView(DetailView):
     context_object_name = "product"
     
 
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def add_to_favorite(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    user =request.user
+    if product not in user.favorites.all():
+        user.favorites.add(product)
+    else:
+        user.favorites.remove(product)
+    return render(request, "favorites.html")
+
+@login_required
+def favorites_detail(request):
+    return render(request, "favorites.html")

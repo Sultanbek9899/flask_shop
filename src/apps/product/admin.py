@@ -4,7 +4,7 @@ from django import forms
 from src.apps.product.models import Product, ProductImage, Category
 
 class CategoryAdminForm(forms.ModelForm):
-    parent = forms.ModelChoiceField(queryset=Category.objects.filter(is_main=True))
+    parent = forms.ModelChoiceField(queryset=Category.objects.filter(is_main=True), required=False)
 
     class Meta:
         model = Category
