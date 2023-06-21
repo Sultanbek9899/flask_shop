@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load static %}
 
 {% block content %}
 
@@ -54,14 +55,30 @@
                                     <td class="price-col">${{ item.price }}</td>
                                     <td class="quantity-col">
                                         <div class="cart-product-quantity">
-                                            {{ item.quantity }}
+                                            
+                                            <button type="button" id="1" class="button-minus" data-id="{{item.product.id}}">
+                                                <i class="icon-minus"></i>
+                                            </button>
+                                            
+                                            {{item.quantity}}
+                                            
+                                            <button type="button" class="button-plus" data-id="{{item.product.id}}">
+                                                <i class="icon-plus"></i>
+                                            </button>
                                         </div><!-- End .cart-product-quantity -->
                                     </td>
-                                    <td class="total-col">${{ item.total_price }}</td>
+                                    <td class="total-col">
+                                        ${{ item.total_price }}
+                                    </td>
                                     <td class="remove-col">
                                         <a href="{% url 'remove_cart' item.product.id %}"><button class="btn-remove"><i class="icon-close"></i></button></a>
                                     </td>
                                 </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td>Вы ещё не добавили товары в корзину</td>
+                                          
+                                    </tr>
                                 {% endfor %}
                                
                             </tbody>
@@ -79,7 +96,7 @@
                                 </form>
                             </div><!-- End .cart-discount -->
 
-                            <a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a>
+                            <a href="{% url 'clear_cart' %}" class="btn btn-outline-dark-2"><span>Очистить корзину</span><i class="icon-refresh"></i></a>
                         </div><!-- End .cart-bottom -->
                     </div><!-- End .col-lg-9 -->
                     <aside class="col-lg-3">
@@ -152,3 +169,7 @@
 
 {% endblock %}
 
+
+{% block js %}
+    <script src="{% static 'assets/js/cart.js' %}"></script>
+{% endblock %}

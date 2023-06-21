@@ -243,6 +243,7 @@ $(document).ready(function () {
                 buttonsWidth: '26px'
             });
         }
+        
     }
 
     // Sticky Content - Sidebar - Social Icons etc..

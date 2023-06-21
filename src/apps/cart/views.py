@@ -23,3 +23,10 @@ def remove_from_cart(request, pk):
 
 class CartTemplateView(TemplateView):
     template_name = "cart.html"
+
+
+
+def clear_cart(request):
+    cart = Cart(request)
+    cart.clear()
+    return redirect("cart_detail")

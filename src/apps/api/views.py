@@ -125,3 +125,27 @@ class UserProductFavoritesList(generics.ListAPIView):
         user = self.request.user
         products = user.favorites.all()
         return products
+
+
+from src.apps.cart.cart import Cart
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
+
+@api_view(["POST"])
+def add_cart(request, pk):
+    if request.method == "POST":
+        cart = Cart(request)
+        product = get_object_or_404(Product,pk=pk)
+        cart.add(product)
+        return Response({"message":"ok"}, status=200)
+    return Response({"message":"Not allowed method"}, status=400)
+
+@api_view(["POST"])
+def minus_cart(request, pk):
+    if request.method == "POST":
+        cart = Cart(request)
+        product = get_object_or_404(Product,pk=pk)
+        cart.minus(product)
+        return Response({"message":"ok"}, status=200)
+    return Response({"message":"Not allowed method"}, status=400)

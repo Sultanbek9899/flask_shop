@@ -41,7 +41,8 @@ urlpatterns = [
     path("user/remove/favorite/<int:pk>/", views.RemoveFavoriteProduct.as_view()),
     path("user/favorites/list/", views.UserProductFavoritesList.as_view()),
     
-
+    path("cart/plus/product/<int:pk>/", views.add_cart),
+    path("cart/minus/product/<int:pk>/", views.minus_cart),
 ]
 
 urlpatterns += router.urls
